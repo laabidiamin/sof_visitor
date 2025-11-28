@@ -1,0 +1,73 @@
+:host ::ng-deep {
+      .p-datatable {
+        .p-datatable-header {
+          background: white;
+          border: 1px solid #e5e7eb;
+          border-radius: 0.5rem 0.5rem 0 0;
+        }
+        
+        .p-datatable-thead > tr > th {
+          background: #f9fafb;
+          color: #374151;
+          font-weight: 600;
+          padding: 1rem;
+          border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .p-datatable-tbody > tr {
+          &:hover {
+            background: #f9fafb;
+          }
+          
+          > td {
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+          }
+        }
+        
+        .p-paginator {
+          background: white;
+          border: 1px solid #e5e7eb;
+          border-top: none;
+          border-radius: 0 0 0.5rem 0.5rem;
+          padding: 1rem;
+        }
+      }
+      
+      .p-tag {
+        padding: 0.25rem 0.75rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+      
+      .p-button {
+        &.p-button-outlined {
+          border-color: #d1d5db;
+          color: #374151;
+          
+          &:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+          }
+        }
+      }
+      
+      .p-input-icon-left > i {
+        left: 1rem;
+        color: #6b7280;
+      }
+      
+      .p-input-icon-left > input {
+        padding-left: 2.5rem;
+      }
+      
+      .p-inputtext {
+        border-color: #d1d5db;
+        padding: 0.625rem 1rem;
+        
+        &:focus {
+          border-color: #3b82f6;
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+      }
+    }

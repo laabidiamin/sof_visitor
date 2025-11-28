@@ -1,0 +1,140 @@
+    <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+      <div class="w-full max-w-md">
+        <div class="bg-white rounded-lg shadow-lg p-8">
+          <!-- Header -->
+          <div class="text-center mb-8">
+            <div class="inline-block bg-blue-600 text-white p-3 rounded-lg mb-4">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+              </svg>
+            </div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Visitor Manager</h1>
+            <p class="text-gray-600">Access your visitor management system</p>
+          </div>
+
+          <!-- Form -->
+          <form (ngSubmit)="handleLogin()" class="space-y-6">
+            <!-- Username -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+              <input
+                type="text"
+                [value]="username()"
+                (input)="username.set($any($event.target).value)"
+                placeholder="Enter your username"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                required
+              />
+            </div>
+
+            <!-- Password -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+              <input
+                type="password"
+                [value]="password()"
+                (input)="password.set($any($event.target).value)"
+                placeholder="Enter your password"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                required
+              />
+            </div>
+
+            <!-- Role Selection -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-3">Select Role</label>
+              <div class="space-y-2">
+                <label 
+                  class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50 transition" 
+                  [class.border-blue-500]="selectedRole() === 'collaborator'" 
+                  [class.bg-blue-50]="selectedRole() === 'collaborator'"
+                >
+                  <input 
+                    type="radio" 
+                    name="role" 
+                    value="collaborator" 
+                    (change)="selectedRole.set('collaborator')" 
+                    [checked]="selectedRole() === 'collaborator'"
+                    class="w-4 h-4 text-blue-600" 
+                  />
+                  <span class="ml-3">
+                    <span class="font-medium text-gray-900">Collaborator</span>
+                    <span class="block text-sm text-gray-500">Default user access</span>
+                  </span>
+                </label>
+
+                <label 
+                  class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50 transition" 
+                  [class.border-blue-500]="selectedRole() === 'mg'" 
+                  [class.bg-blue-50]="selectedRole() === 'mg'"
+                >
+                  <input 
+                    type="radio" 
+                    name="role" 
+                    value="mg" 
+                    (change)="selectedRole.set('mg')" 
+                    [checked]="selectedRole() === 'mg'"
+                    class="w-4 h-4 text-blue-600" 
+                  />
+                  <span class="ml-3">
+                    <span class="font-medium text-gray-900">MG Team</span>
+                    <span class="block text-sm text-gray-500">Management team access</span>
+                  </span>
+                </label>
+
+                <label 
+                  class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50 transition" 
+                  [class.border-blue-500]="selectedRole() === 'it'" 
+                  [class.bg-blue-50]="selectedRole() === 'it'"
+                >
+                  <input 
+                    type="radio" 
+                    name="role" 
+                    value="it" 
+                    (change)="selectedRole.set('it')" 
+                    [checked]="selectedRole() === 'it'"
+                    class="w-4 h-4 text-blue-600" 
+                  />
+                  <span class="ml-3">
+                    <span class="font-medium text-gray-900">IT Team</span>
+                    <span class="block text-sm text-gray-500">IT team access</span>
+                  </span>
+                </label>
+
+                <label 
+                  class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50 transition" 
+                  [class.border-blue-500]="selectedRole() === 'admin'" 
+                  [class.bg-blue-50]="selectedRole() === 'admin'"
+                >
+                  <input 
+                    type="radio" 
+                    name="role" 
+                    value="admin" 
+                    (change)="selectedRole.set('admin')" 
+                    [checked]="selectedRole() === 'admin'"
+                    class="w-4 h-4 text-blue-600" 
+                  />
+                  <span class="ml-3">
+                    <span class="font-medium text-gray-900">Admin</span>
+                    <span class="block text-sm text-gray-500">Administrator access</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Login Button -->
+            <button
+              type="submit"
+              class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
+            >
+              Sign In
+            </button>
+          </form>
+
+          <!-- Footer -->
+          <p class="text-center text-gray-600 text-sm mt-6">
+            Demo mode: Use any username and password
+          </p>
+        </div>
+      </div>
+    </div>

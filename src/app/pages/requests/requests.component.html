@@ -1,0 +1,165 @@
+<div class="p-8">
+      <h1 class="text-4xl font-bold text-gray-900 mb-8">Demandes de visites</h1>
+
+      <!-- Statistics Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <!-- Pending -->
+        <div class="card p-6">
+          <div class="flex-1">
+            <p class="text-gray-600 text-sm font-medium">En attente</p>
+            <p class="text-3xl font-bold text-yellow-600 mt-2">{{ pendingCount() }}</p>
+          </div>
+        </div>
+
+        <!-- Approved -->
+        <div class="card p-6">
+          <div class="flex-1">
+            <p class="text-gray-600 text-sm font-medium">Approuvées</p>
+            <p class="text-3xl font-bold text-green-600 mt-2">{{ approvedCount() }}</p>
+          </div>
+        </div>
+
+        <!-- Rejected -->
+        <div class="card p-6">
+          <div class="flex-1">
+            <p class="text-gray-600 text-sm font-medium">Refusées</p>
+            <p class="text-3xl font-bold text-red-600 mt-2">{{ rejectedCount() }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Requests Table -->
+      <div class="card overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead class="bg-gray-50 border-b border-gray-200">
+              <tr>
+                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Visiteur</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Entreprise</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Services</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Statut</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let request of filteredRequests()" class="border-b border-gray-200 hover:bg-gray-50">
+                <td class="px-6 py-4">
+                  <div>
+                    <p class="font-semibold text-gray-900">{{ request.visitorName }}</p>
+                    <p class="text-sm text-gray-600">{{ request.email }}</p>
+                  </div>
+                </td>
+                <td class="px-6 py-4 text-sm text-gray-600">{{ request.company }}</td>
+                <td class="px-6 py-4">
+                  <div class="flex flex-wrap gap-2">
+                    <ng-container *ngFor="let service of request.services">
+                      <span class="inline-block text-xs font-medium px-2 py-1 rounded-full"
+                            [class.bg-purple-100]="service.team === 'mg'"
+                            [class.text-purple-800]="service.team === 'mg'"
+                            [class.bg-blue-100]="service.team === 'it'"
+                            [class.text-blue-800]="service.team === 'it'"
+                      >
+                        {{ service.name }}
+                      </span>
+                    </ng-container>
+                  </div>
+                </td>
+                <td class="px-6 py-4">
+                  <div class="space-y-2">
+                    <div class="flex items-center gap-2" *ngIf="request.mgStatus">
+                      <span class="text-xs font-medium text-purple-700">MG:</span>
+                      <span
+                        class="inline-block text-xs font-medium px-2 py-1 rounded-full"
+                        [class.bg-green-100]="request.mgStatus === 'approved'"
+                        [class.text-green-800]="request.mgStatus === 'approved'"
+                        [class.bg-red-100]="request.mgStatus === 'rejected'"
+                        [class.text-red-800]="request.mgStatus === 'rejected'"
+                        [class.bg-yellow-100]="request.mgStatus === 'pending'"
+                        [class.text-yellow-800]="request.mgStatus === 'pending'"
+                      >
+                        {{ formatStatus(request.mgStatus) }}
+                      </span>
+                    </div>
+                    <div class="flex items-center gap-2" *ngIf="request.itStatus">
+                      <span class="text-xs font-medium text-blue-700">IT:</span>
+                      <span
+                        class="inline-block text-xs font-medium px-2 py-1 rounded-full"
+                        [class.bg-green-100]="request.itStatus === 'approved'"
+                        [class.text-green-800]="request.itStatus === 'approved'"
+                        [class.bg-red-100]="request.itStatus === 'rejected'"
+                        [class.text-red-800]="request.itStatus === 'rejected'"
+                        [class.bg-yellow-100]="request.itStatus === 'pending'"
+                        [class.text-yellow-800]="request.itStatus === 'pending'"
+                      >
+                        {{ formatStatus(request.itStatus) }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4">
+                  <div class="flex gap-2">
+                    <!-- MG Team Approval -->
+                    <ng-container *ngIf="canApproveMg(request)">
+                      <button
+                        (click)="approveRequest(request.id, 'mg')"
+                        class="text-xs font-medium px-3 py-1 rounded bg-green-100 text-green-800 hover:bg-green-200 transition"
+                      >
+                        Approuver
+                      </button>
+                      <button
+                        (click)="openRejectionModal(request.id, 'mg')"
+                        class="text-xs font-medium px-3 py-1 rounded bg-red-100 text-red-800 hover:bg-red-200 transition"
+                      >
+                        Refuser
+                      </button>
+                    </ng-container>
+
+                    <!-- IT Team Approval -->
+                    <ng-container *ngIf="canApproveIt(request)">
+                      <button
+                        (click)="approveRequest(request.id, 'it')"
+                        class="text-xs font-medium px-3 py-1 rounded bg-green-100 text-green-800 hover:bg-green-200 transition"
+                      >
+                        Approuver
+                      </button>
+                      <button
+                        (click)="openRejectionModal(request.id, 'it')"
+                        class="text-xs font-medium px-3 py-1 rounded bg-red-100 text-red-800 hover:bg-red-200 transition"
+                      >
+                        Refuser
+                      </button>
+                    </ng-container>
+
+                    <!-- View Details (Collaborator) -->
+                    <ng-container *ngIf="currentUserRole() === 'collaborator'">
+                      <button class="text-xs font-medium px-3 py-1 rounded bg-blue-100 text-blue-800 hover:bg-blue-200 transition">
+                        Détails
+                      </button>
+                    </ng-container>
+
+                    <!-- Admin View All -->
+                    <ng-container *ngIf="currentUserRole() === 'admin'">
+                      <button class="text-xs font-medium px-3 py-1 rounded bg-gray-200 text-gray-800 hover:bg-gray-300 transition">
+                        Voir
+                      </button>
+                    </ng-container>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="filteredRequests().length === 0">
+                <td colspan="5" class="px-6 py-8 text-center text-gray-600">
+                  Aucune demande trouvée
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Rejection Modal -->
+      <app-rejection-modal
+        *ngIf="showRejectionModal()"
+        (closed)="closeRejectionModal()"
+        (submitted)="submitRejection($event)"
+      ></app-rejection-modal>
+    </div>

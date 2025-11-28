@@ -1,0 +1,158 @@
+<div class="p-8">
+      <!-- Header -->
+      <div class="flex justify-between items-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-900">Visiteurs</h1>
+        <button 
+          (click)="openNewVisitorModal()" 
+          class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition flex items-center gap-2">
+          <span class="text-lg">+</span>
+          Nouveau Visiteur
+        </button>
+      </div>
+
+      <!-- PrimeNG DataTable -->
+      <div class="card">
+        <p-table 
+          #dt1 
+          [value]="visitors()" 
+          dataKey="id" 
+          [rows]="10" 
+          [rowsPerPageOptions]="[10, 25, 50]" 
+          [loading]="loading()" 
+          [paginator]="true"
+          [globalFilterFields]="['nom', 'entreprise', 'email', 'telephone', 'hote', 'statut']"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="Affichage de {first} à {last} sur {totalRecords} entrées"
+          styleClass="p-datatable-gridlines p-datatable-striped">
+          
+          <!-- Caption avec recherche et filtres -->
+          <ng-template pTemplate="caption">
+            <div class="flex items-center justify-between gap-4 py-4">
+              <!-- Bouton Clear -->
+              <p-button 
+                label="Effacer" 
+                [outlined]="true" 
+                icon="pi pi-filter-slash" 
+                (onClick)="clear(dt1)"
+                severity="secondary" />
+              
+              <!-- Bouton Exporter -->
+              <p-button 
+                label="Exporter" 
+                icon="pi pi-download" 
+                [outlined]="true"
+                severity="secondary"
+                (onClick)="exportExcel()" />
+              
+              <!-- Bouton Filtrer -->
+              <p-button 
+                label="Filtrer" 
+                icon="pi pi-filter" 
+                [outlined]="true"
+                severity="secondary" />
+              
+              <!-- Recherche globale -->
+              <div class="p-input-icon-left ml-auto">
+                <i class="pi pi-search"></i>
+                <input 
+                  pInputText 
+                  type="text" 
+                  (input)="onGlobalFilter(dt1, $event)" 
+                  placeholder="Rechercher..." 
+                  class="w-80" />
+              </div>
+            </div>
+          </ng-template>
+
+          <!-- En-têtes de colonnes -->
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="nom" style="min-width: 150px">
+                Nom <p-sortIcon field="nom" />
+              </th>
+              <th pSortableColumn="entreprise" style="min-width: 150px">
+                Entreprise <p-sortIcon field="entreprise" />
+              </th>
+              <th pSortableColumn="email" style="min-width: 200px">
+                Email <p-sortIcon field="email" />
+              </th>
+              <th pSortableColumn="telephone" style="min-width: 150px">
+                Téléphone <p-sortIcon field="telephone" />
+              </th>
+              <th pSortableColumn="hote" style="min-width: 150px">
+                Hôte <p-sortIcon field="hote" />
+              </th>
+              <th pSortableColumn="arrivee" style="min-width: 150px">
+                Arrivée <p-sortIcon field="arrivee" />
+              </th>
+              <th pSortableColumn="depart" style="min-width: 150px">
+                Départ <p-sortIcon field="depart" />
+              </th>
+              <th pSortableColumn="statut" style="min-width: 120px">
+                Statut <p-sortIcon field="statut" />
+              </th>
+              <th style="width: 100px">Actions</th>
+            </tr>
+          </ng-template>
+
+          <!-- Corps du tableau -->
+          <ng-template pTemplate="body" let-visitor>
+            <tr>
+              <td>
+                <span class="font-semibold">{{ visitor.nom }}</span>
+              </td>
+              <td>{{ visitor.entreprise }}</td>
+              <td>{{ visitor.email }}</td>
+              <td>{{ visitor.telephone }}</td>
+              <td>{{ visitor.hote }}</td>
+              <td>{{ visitor.arrivee }}</td>
+              <td>{{ visitor.depart || '-' }}</td>
+              <td>
+                <p-tag 
+                  [value]="visitor.statut" 
+                  [severity]="visitor.statut === 'Présent' ? 'success' : 'secondary'" />
+              </td>
+              <td>
+                <button 
+                  type="button" 
+                  pButton 
+                  icon="pi pi-ellipsis-v" 
+                  class="p-button-text p-button-rounded"
+                  (click)="showActions($event, visitor)">
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+
+          <!-- Message si vide -->
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="9" class="text-center py-8">
+                <div class="text-gray-500">
+                  <i class="pi pi-info-circle text-4xl mb-4"></i>
+                  <p class="text-lg font-semibold">Aucun visiteur trouvé</p>
+                  <p class="text-sm">Cliquez sur "Nouveau Visiteur" pour ajouter un visiteur</p>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+
+    <!-- Menu contextuel pour actions -->
+    <p-menu #menu [model]="actionItems()" [popup]="true"></p-menu>
+
+    <!-- Modals -->
+    <app-new-visitor-modal
+      *ngIf="showNewVisitorModal()"
+      (closed)="closeNewVisitorModal()"
+      (submitted)="onVisitorFormSubmitted($event)"
+    ></app-new-visitor-modal>
+
+    <app-services-modal
+      *ngIf="showServicesModal()"
+      [visitorForm]="visitorFormData()"
+      (closed)="closeServicesModal()"
+      (submitted)="onServicesSelected($event)"
+    ></app-services-modal>

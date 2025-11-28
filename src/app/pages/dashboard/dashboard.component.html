@@ -1,0 +1,136 @@
+<div class="p-8">
+      <!-- Header -->
+      <div class="flex justify-between items-center mb-8">
+        <div>
+          <h1 class="text-4xl font-bold text-gray-900">Tableau de bord</h1>
+          <p class="text-gray-600 mt-2">Vue d'ensemble de l'activité des visiteurs</p>
+        </div>
+        
+      </div>
+
+      <!-- Statistics Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Total Visitors -->
+        <div class="stat-card">
+          <div class="flex-1">
+            <p class="text-gray-600 text-sm font-medium">Visiteurs totaux</p>
+            <p class="text-3xl font-bold text-gray-900 mt-2">{{ totalVisitors() }}</p>
+          </div>
+          <div class="bg-blue-100 p-3 rounded-lg">
+            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 12H9m6 0a4 4 0 11-8 0m8 0a4 4 0 01-8 0H9"></path>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Present Visitors -->
+        <div class="stat-card">
+          <div class="flex-1">
+            <p class="text-gray-600 text-sm font-medium">Présents actuellement</p>
+            <p class="text-3xl font-bold text-green-600 mt-2">{{ presentVisitors() }}</p>
+          </div>
+          <div class="bg-green-100 p-3 rounded-lg">
+            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Arrivals Today -->
+        <div class="stat-card">
+          <div class="flex-1">
+            <p class="text-gray-600 text-sm font-medium">Arrivées aujourd'hui</p>
+            <p class="text-3xl font-bold text-purple-600 mt-2">{{ totalVisitors() }}</p>
+          </div>
+          <div class="bg-purple-100 p-3 rounded-lg">
+            <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Pending Requests -->
+        <div class="stat-card">
+          <div class="flex-1">
+            <p class="text-gray-600 text-sm font-medium">Demandes en attente</p>
+            <p class="text-3xl font-bold text-orange-600 mt-2">{{ pendingRequests() }}</p>
+          </div>
+          <div class="bg-orange-100 p-3 rounded-lg">
+            <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m7 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity and Stats -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Left Column - More Stats -->
+        <div class="lg:col-span-2">
+          <div class="card p-6">
+            <h2 class="text-xl font-bold text-gray-900 mb-6">Activité récente</h2>
+            <div class="space-y-4">
+              <ng-container *ngFor="let activity of recentActivity()">
+                <div class="flex items-center justify-between p-4 border border-gray-100 rounded-lg hover:bg-gray-50 transition">
+                  <div class="flex items-center gap-4">
+                    <div [style.background-color]="activity.avatar" class="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                      {{ activity.name[0] }}
+                    </div>
+                    <div>
+                      <p class="font-semibold text-gray-900">{{ activity.name }}</p>
+                      <p class="text-sm text-gray-600">{{ activity.company }}</p>
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <p class="text-sm font-medium text-gray-900">{{ activity.action }}</p>
+                    <p class="text-xs text-gray-500">{{ activity.time }}</p>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column - Stats Cards -->
+        <div class="space-y-6">
+          <!-- Visitors Today -->
+          <div class="card p-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">Visiteurs aujourd'hui</h3>
+            <p class="text-4xl font-bold text-gray-900">0</p>
+            <p class="text-sm text-gray-600 mt-2">7 derniers jours</p>
+            <div class="mt-4 text-sm">
+              <span class="text-green-600 font-medium">↑ 0%</span>
+              <span class="text-gray-600"> vs hier (0)</span>
+            </div>
+          </div>
+
+          <!-- This Week -->
+          <div class="card p-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">Cette semaine</h3>
+            <p class="text-4xl font-bold text-gray-900">0</p>
+            <p class="text-sm text-gray-600 mt-2">7 derniers jours</p>
+          </div>
+
+          <!-- Average -->
+          <div class="card p-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">Moyenne quotidienne</h3>
+            <p class="text-4xl font-bold text-gray-900">0</p>
+            <p class="text-sm text-gray-600 mt-2">visiteurs/jour</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modals -->
+      <app-new-visitor-modal
+        *ngIf="showNewVisitorModal()"
+        (closed)="closeNewVisitorModal()"
+        (submitted)="onVisitorFormSubmitted($event)"
+      ></app-new-visitor-modal>
+
+      <app-services-modal
+        *ngIf="showServicesModal()"
+        [visitorForm]="visitorFormData()"
+        (closed)="closeServicesModal()"
+        (submitted)="onServicesSelected($event)"
+      ></app-services-modal>
+    </div>
